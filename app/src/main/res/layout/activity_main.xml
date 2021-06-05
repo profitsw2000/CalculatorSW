@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srcCompat="@drawable/calculator"
+        android:alpha="0.1"/>
+
     <include
         layout="@layout/calculator"
         android:layout_width="match_parent"

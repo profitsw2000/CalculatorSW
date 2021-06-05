@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CalculatorSW</string>
+    <string name="app_name">Калькулятор</string>
     <string name="enter_field">0</string>
     <string name="button_clear">C</string>
     <string name="button_1">1</string>

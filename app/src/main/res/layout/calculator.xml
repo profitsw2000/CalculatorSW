@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:background="@color/enter_field_background"
         android:gravity="bottom|end"
+        android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:lines="2"
         android:text="@string/enter_field_text"
