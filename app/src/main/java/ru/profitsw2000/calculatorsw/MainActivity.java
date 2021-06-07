@@ -58,6 +58,15 @@ public class MainActivity extends AppCompatActivity {
         setListener(eight, calculator);
         setListener(nine, calculator);
         setListener(zero, calculator);
+        setListener(point, calculator);
+        setListener(divide, calculator);
+        setListener(multiple, calculator);
+        setListener(minus, calculator);
+        setListener(plus, calculator);
+        setListener(clear, calculator);
+        setListener(backspace, calculator);
+        setListener(sqrt, calculator);
+        setListener(equal, calculator);
     }
 
     private void setListener (Button button, Calculator calculator)
@@ -65,7 +74,8 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                calculator.getButton(button.getText().toString());
+                calculator.setText(enter_field);
             }
         });
     }
