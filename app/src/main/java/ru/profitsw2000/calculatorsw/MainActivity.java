@@ -13,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
     private Button one, two, three, four, five, six, seven, eight, nine, zero,
             point, divide, multiple, minus, plus, clear, backspace, sqrt, equal ;
     private TextView enter_field    ;
+    Calculator calculator = new Calculator()    ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,73 +48,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void buttonsListen() {
-        zero.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                enter_field.setText("0");
-            }
-        });
+        setListener(one, calculator);
+        setListener(two, calculator);
+        setListener(three, calculator);
+        setListener(four, calculator);
+        setListener(five, calculator);
+        setListener(six, calculator);
+        setListener(seven, calculator);
+        setListener(eight, calculator);
+        setListener(nine, calculator);
+        setListener(zero, calculator);
+    }
 
-        one.setOnClickListener(new View.OnClickListener() {
+    private void setListener (Button button, Calculator calculator)
+    {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                enter_field.setText("1");
-            }
-        });
 
-        two.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                enter_field.setText("2");
-            }
-        });
-
-        three.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                enter_field.setText("3");
-            }
-        });
-
-        four.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                enter_field.setText("4");
-            }
-        });
-
-        five.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                enter_field.setText("5");
-            }
-        });
-
-        six.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                enter_field.setText("6");
-            }
-        });
-
-        seven.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                enter_field.setText("7");
-            }
-        });
-
-        eight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                enter_field.setText("8");
-            }
-        });
-
-        nine.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                enter_field.setText("9");
             }
         });
     }
