@@ -9,10 +9,6 @@ class Calculator implements Serializable {
     private StringBuilder argument1, argument2 ;
     private Double var1, var2, var;
 
-    public String getOutputText() {
-        return outputText;
-    }
-
     private String outputText   ;
     private Operation operation ;
 
@@ -35,30 +31,22 @@ class Calculator implements Serializable {
         }
     }
 
-    private StringBuilder convertDoubleToStringBuilder(Double dbl) {
-        StringBuilder stringBuilder = new StringBuilder()    ;
-        String string = new String()    ;
+    private String convertString (String string) {
+        StringBuilder stringBuilder = new StringBuilder()   ;
+        int index ;
 
-        string = Double.toString(dbl)   ;
         stringBuilder.append(string)    ;
-
-        if (dbl%1 != 0) {
-            stringBuilder.replace(stringBuilder.indexOf("."), (stringBuilder.indexOf(".") + 1), ",")    ;
-        } else {
-            stringBuilder.setLength(stringBuilder.length() - 2);
+        if (stringBuilder.indexOf(".") != -1) {
+            index = stringBuilder.indexOf(".0") ;
+            if (index == stringBuilder.length() - 2) {
+                stringBuilder.setLength(stringBuilder.length() - 2);
+            }
+            else {
+                stringBuilder.replace(stringBuilder.indexOf("."), (stringBuilder.indexOf(".") + 1), ",")    ;
+            }
         }
 
-        return stringBuilder    ;
-    }
-
-
-    private Double convertStringBuilderToDouble(StringBuilder stringBuilder) {
-
-        if (stringBuilder.indexOf(",") != -1) {
-            stringBuilder.replace(stringBuilder.indexOf(","), (stringBuilder.indexOf(",") + 1), ".")    ;
-        }
-
-        return Double.parseDouble(stringBuilder.toString())    ;
+        return stringBuilder.toString()   ;
     }
 
     private void equalPressed() {
@@ -78,7 +66,7 @@ class Calculator implements Serializable {
             default:
                 break;
         }
-        outputText = Double.toString(var)   ;
+        outputText = convertString(Double.toString(var))   ;
         argument1.setLength(0);
         argument2.setLength(0);
         var1 = var  ;
@@ -94,13 +82,13 @@ class Calculator implements Serializable {
         if(isInteger(buttonText)) {
             if (this.operation == Operation.NONE) {
                 argument1.append(buttonText) ;
-                var1 = convertStringBuilderToDouble(argument1)    ;
-                outputText = argument1.toString()   ;
+                var1 = Double.parseDouble(argument1.toString())    ;
+                outputText = convertString(argument1.toString())   ;
             }
             else {
                 argument2.append(buttonText)    ;
-                var2 = convertStringBuilderToDouble(argument2) ;
-                outputText = argument2.toString()   ;
+                var2 = Double.parseDouble(argument2.toString()) ;
+                outputText = convertString(argument2.toString())   ;
             }
         }
         else {
@@ -108,13 +96,13 @@ class Calculator implements Serializable {
                 case ",":
                     if (this.operation == Operation.NONE) {
                         if (argument1.indexOf(",") == -1) {
-                            argument1.append(",");
-                            outputText = argument1.toString()   ;
+                            argument1.append(".");
+                            outputText = convertString(argument1.toString())   ;
                         }
                     } else {
                         if (argument2.indexOf(",") == -1) {
-                            argument2.append(",");
-                            outputText = argument2.toString()   ;
+                            argument2.append(".");
+                            outputText = convertString(argument2.toString())   ;
                         }
                     }
                     break;
@@ -132,7 +120,7 @@ class Calculator implements Serializable {
                         if (argument1.length() > 1) {
                             argument1.deleteCharAt(argument1.length() - 1)    ;
                             var1 = Double.parseDouble(argument1.toString())    ;
-                            outputText = argument1.toString();
+                            outputText = convertString(argument1.toString());
                         }
                         else if (argument1.length() > 0 && argument1.charAt(0) != '0'){
                             argument1.setLength(0)   ;
@@ -143,7 +131,7 @@ class Calculator implements Serializable {
                         if (argument2.length() > 1) {
                             argument2.deleteCharAt(argument2.length() - 1)    ;
                             var2 = Double.parseDouble(argument2.toString())    ;
-                            outputText = argument2.toString();
+                            outputText = convertString(argument2.toString());
                         }
                         else if (argument2.length() > 0 && argument2.charAt(0) != '0'){
                             argument2.setLength(0)   ;
@@ -156,11 +144,11 @@ class Calculator implements Serializable {
                 case "√":
                     if (this.operation == Operation.NONE) {
                         var = Math.sqrt(var1)   ;
-                        outputText = convertDoubleToStringBuilder(var).toString()  ;
+                        outputText = convertString(Double.toString(var))  ;
                     }
                     else {
                         var2 = Math.sqrt(var2)  ;
-                        outputText = convertDoubleToStringBuilder(var2).toString()  ;
+                        outputText = convertString(Double.toString(var2))  ;
                     }
                     break;
                 case "-":
