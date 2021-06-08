@@ -1,15 +1,16 @@
 package ru.profitsw2000.calculatorsw;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final static String keyCalculator = "Calculator"    ;
     private Button one, two, three, four, five, six, seven, eight, nine, zero,
             point, divide, multiple, minus, plus, clear, backspace, sqrt, equal ;
     private TextView enter_field    ;
@@ -22,6 +23,19 @@ public class MainActivity extends AppCompatActivity {
 
         findViews();
         buttonsListen();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(keyCalculator, calculator);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        calculator = (Calculator) savedInstanceState.getSerializable(keyCalculator) ;
+        calculator.setText(enter_field);
     }
 
     private void findViews(){

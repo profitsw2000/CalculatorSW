@@ -3,9 +3,16 @@ package ru.profitsw2000.calculatorsw;
 import android.view.View;
 import android.widget.TextView;
 
-class Calculator {
+import java.io.Serializable;
+
+class Calculator implements Serializable {
     private StringBuilder argument1, argument2 ;
     private Double var1, var2, var;
+
+    public String getOutputText() {
+        return outputText;
+    }
+
     private String outputText   ;
     private Operation operation ;
 
@@ -26,6 +33,32 @@ class Calculator {
         catch( Exception e ) {
             return false;
         }
+    }
+
+    private StringBuilder convertDoubleToStringBuilder(Double dbl) {
+        StringBuilder stringBuilder = new StringBuilder()    ;
+        String string = new String()    ;
+
+        string = Double.toString(dbl)   ;
+        stringBuilder.append(string)    ;
+
+        if (dbl%1 != 0) {
+            stringBuilder.replace(stringBuilder.indexOf("."), (stringBuilder.indexOf(".") + 1), ",")    ;
+        } else {
+            stringBuilder.setLength(stringBuilder.length() - 2);
+        }
+
+        return stringBuilder    ;
+    }
+
+
+    private Double convertStringBuilderToDouble(StringBuilder stringBuilder) {
+
+        if (stringBuilder.indexOf(",") != -1) {
+            stringBuilder.replace(stringBuilder.indexOf(","), (stringBuilder.indexOf(",") + 1), ".")    ;
+        }
+
+        return Double.parseDouble(stringBuilder.toString())    ;
     }
 
     private void equalPressed() {
@@ -61,12 +94,12 @@ class Calculator {
         if(isInteger(buttonText)) {
             if (this.operation == Operation.NONE) {
                 argument1.append(buttonText) ;
-                var1 = Double.parseDouble(argument1.toString())    ;
+                var1 = convertStringBuilderToDouble(argument1)    ;
                 outputText = argument1.toString()   ;
             }
             else {
                 argument2.append(buttonText)    ;
-                var2 = Double.parseDouble(argument2.toString()) ;
+                var2 = convertStringBuilderToDouble(argument2) ;
                 outputText = argument2.toString()   ;
             }
         }
@@ -75,12 +108,12 @@ class Calculator {
                 case ",":
                     if (this.operation == Operation.NONE) {
                         if (argument1.indexOf(",") == -1) {
-                            argument1.append(".");
+                            argument1.append(",");
                             outputText = argument1.toString()   ;
                         }
                     } else {
                         if (argument2.indexOf(",") == -1) {
-                            argument2.append(".");
+                            argument2.append(",");
                             outputText = argument2.toString()   ;
                         }
                     }
@@ -123,11 +156,11 @@ class Calculator {
                 case "√":
                     if (this.operation == Operation.NONE) {
                         var = Math.sqrt(var1)   ;
-                        outputText = Double.toString(var)  ;
+                        outputText = convertDoubleToStringBuilder(var).toString()  ;
                     }
                     else {
                         var2 = Math.sqrt(var2)  ;
-                        outputText = Double.toString(var2)  ;
+                        outputText = convertDoubleToStringBuilder(var2).toString()  ;
                     }
                     break;
                 case "-":
