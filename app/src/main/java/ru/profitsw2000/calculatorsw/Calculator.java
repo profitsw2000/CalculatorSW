@@ -172,7 +172,7 @@ class Calculator implements Serializable {
                         this.operation = Operation.DIVIDE    ;
                     }
                     break;
-                case "x":
+                case "*":
                     if (this.operation != Operation.MULTIPLE){
                         argument2.setLength(0);
                         var2 = var1 ;
