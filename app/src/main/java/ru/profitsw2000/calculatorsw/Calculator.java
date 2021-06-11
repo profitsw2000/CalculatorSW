@@ -8,7 +8,6 @@ import android.widget.TextView;
 public class Calculator implements Parcelable {
     private StringBuilder argument1, argument2 ;
     private Double var1, var2, var;
-
     private String outputText   ;
     private Operation operation ;
 
@@ -39,6 +38,8 @@ public class Calculator implements Parcelable {
             var = in.readDouble();
         }
         outputText = in.readString();
+        argument1.append(in.readString()) ;
+        argument2.append(in.readString()) ;
     }
 
     public static final Creator<Calculator> CREATOR = new Creator<Calculator>() {
@@ -303,6 +304,8 @@ public class Calculator implements Parcelable {
             dest.writeDouble(var);
         }
         dest.writeString(outputText);
+        dest.writeString(argument1.toString());
+        dest.writeString(argument2.toString());
     }
 }
 

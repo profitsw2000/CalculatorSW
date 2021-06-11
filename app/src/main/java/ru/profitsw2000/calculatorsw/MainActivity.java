@@ -14,8 +14,7 @@ public class MainActivity extends AppCompatActivity {
     private Button one, two, three, four, five, six, seven, eight, nine, zero,
             point, divide, multiple, minus, plus, clear, backspace, sqrt, equal ;
     private TextView enter_field    ;
-    Calculator calculator = new Calculator()    ;
-    private Bundle outState;
+    private Calculator calculator = new Calculator()   ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
