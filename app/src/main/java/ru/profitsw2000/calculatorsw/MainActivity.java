@@ -10,11 +10,12 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final static String keyCalculator = "Calculator"    ;
+    private final static String keyCalculator = "AAAAA"    ;
     private Button one, two, three, four, five, six, seven, eight, nine, zero,
             point, divide, multiple, minus, plus, clear, backspace, sqrt, equal ;
     private TextView enter_field    ;
     Calculator calculator = new Calculator()    ;
+    private Bundle outState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,13 +29,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(keyCalculator, calculator);
+        outState.putParcelable(keyCalculator, calculator);
     }
 
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        calculator = (Calculator) savedInstanceState.getSerializable(keyCalculator) ;
+        Calculator calculator = new Calculator()    ;
+        calculator = savedInstanceState.getParcelable(keyCalculator) ;
         calculator.setText(enter_field);
     }
 

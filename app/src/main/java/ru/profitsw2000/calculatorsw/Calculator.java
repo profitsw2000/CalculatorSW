@@ -1,11 +1,11 @@
 package ru.profitsw2000.calculatorsw;
 
-import android.view.View;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.widget.TextView;
 
-import java.io.Serializable;
 
-class Calculator implements Serializable {
+public class Calculator implements Parcelable {
     private StringBuilder argument1, argument2 ;
     private Double var1, var2, var;
 
@@ -14,6 +14,7 @@ class Calculator implements Serializable {
 
     Calculator () {
         this.argument1 = new StringBuilder() ;
+        argument1.append("0")   ;
         this.argument2 = new StringBuilder() ;
         this.var1 = 0.0   ;
         this.var2 = 0.0   ;
@@ -21,7 +22,38 @@ class Calculator implements Serializable {
         this.operation = Operation.NONE ;
     }
 
-    private boolean isInteger( String input ) {
+    protected Calculator(Parcel in) {
+        if (in.readByte() == 0) {
+            var1 = null;
+        } else {
+            var1 = in.readDouble();
+        }
+        if (in.readByte() == 0) {
+            var2 = null;
+        } else {
+            var2 = in.readDouble();
+        }
+        if (in.readByte() == 0) {
+            var = null;
+        } else {
+            var = in.readDouble();
+        }
+        outputText = in.readString();
+    }
+
+    public static final Creator<Calculator> CREATOR = new Creator<Calculator>() {
+        @Override
+        public Calculator createFromParcel(Parcel in) {
+            return new Calculator(in);
+        }
+
+        @Override
+        public Calculator[] newArray(int size) {
+            return new Calculator[size];
+        }
+    };
+
+    private boolean isInteger(String input) {
         try {
             Integer.parseInt( input );
             return true;
@@ -29,6 +61,30 @@ class Calculator implements Serializable {
         catch( Exception e ) {
             return false;
         }
+    }
+
+    public StringBuilder getArgument1() {
+        return argument1;
+    }
+
+    public StringBuilder getArgument2() {
+        return argument2;
+    }
+
+    public Double getVar1() {
+        return var1;
+    }
+
+    public Double getVar2() {
+        return var2;
+    }
+
+    public Double getVar() {
+        return var;
+    }
+
+    public String getOutputText() {
+        return outputText;
     }
 
     private String convertString (String string) {
@@ -44,6 +100,9 @@ class Calculator implements Serializable {
             else {
                 stringBuilder.replace(stringBuilder.indexOf("."), (stringBuilder.indexOf(".") + 1), ",")    ;
             }
+        }
+        else {
+            if (stringBuilder.length() > 1 && stringBuilder.charAt(0) == '0') stringBuilder.replace(0, 1, "")    ;
         }
 
         return stringBuilder.toString()   ;
@@ -68,6 +127,7 @@ class Calculator implements Serializable {
         }
         outputText = convertString(Double.toString(var))   ;
         argument1.setLength(0);
+        argument1.append("0")   ;
         argument2.setLength(0);
         var1 = var  ;
         this.operation = Operation.NONE ;
@@ -81,14 +141,27 @@ class Calculator implements Serializable {
 
         if(isInteger(buttonText)) {
             if (this.operation == Operation.NONE) {
-                argument1.append(buttonText) ;
+                if (argument1.toString().equals("0")){
+                    argument1.setLength(0);
+                    argument1.append(buttonText) ;
+                }
+                else {
+                    argument1.append(buttonText) ;
+                }
                 var1 = Double.parseDouble(argument1.toString())    ;
                 outputText = convertString(argument1.toString())   ;
             }
             else {
-                argument2.append(buttonText)    ;
+                if (argument2.toString().equals("0")){
+                    argument2.setLength(0);
+                    argument2.append(buttonText) ;
+                }
+                else {
+                    argument2.append(buttonText) ;
+                }
                 var2 = Double.parseDouble(argument2.toString()) ;
-                outputText = convertString(argument2.toString())   ;
+                //add second line
+                outputText = convertString(argument1.toString()) + convertString(argument2.toString())   ;
             }
         }
         else {
@@ -97,17 +170,21 @@ class Calculator implements Serializable {
                     if (this.operation == Operation.NONE) {
                         if (argument1.indexOf(",") == -1) {
                             argument1.append(".");
-                            outputText = convertString(argument1.toString())   ;
+                            outputText = convertString(argument1.toString());
                         }
-                    } else {
-                        if (argument2.indexOf(",") == -1) {
-                            argument2.append(".");
-                            outputText = convertString(argument2.toString())   ;
+                     } else {
+                        if (argument2.length() > 0){
+                            if (argument2.indexOf(",") == -1) {
+                                argument2.append(".");
+                                //add second line
+                                outputText = convertString(argument1.toString()) + convertString(argument2.toString())   ;
+                            }
                         }
                     }
                     break;
                 case "C":
                     argument1.setLength(0);
+                    argument1.append("0")   ;
                     argument2.setLength(0);
                     this.var1 = 0.0   ;
                     this.var2 = 0.0   ;
@@ -131,12 +208,14 @@ class Calculator implements Serializable {
                         if (argument2.length() > 1) {
                             argument2.deleteCharAt(argument2.length() - 1)    ;
                             var2 = Double.parseDouble(argument2.toString())    ;
-                            outputText = convertString(argument2.toString());
+                            //add second line
+                            outputText = convertString(argument1.toString()) + convertString(argument2.toString());
                         }
                         else if (argument2.length() > 0 && argument2.charAt(0) != '0'){
                             argument2.setLength(0)   ;
                             var2 = 0.0  ;
-                            outputText = "0"    ;
+                            //add second line
+                            outputText = convertString(argument1.toString()) + "0"    ;
                         }
                     }
 
@@ -148,35 +227,32 @@ class Calculator implements Serializable {
                     }
                     else {
                         var2 = Math.sqrt(var2)  ;
-                        outputText = convertString(Double.toString(var2))  ;
+                        //add second line
+                        outputText = convertString(argument1.toString()) + convertString(Double.toString(var2))  ;
                     }
                     break;
                 case "-":
                     if (this.operation != Operation.MINUS){
-                        argument2.setLength(0);
-                        var2 = var1 ;
                         this.operation = Operation.MINUS    ;
+                        operationButton(buttonText);
                     }
                     break;
                 case "+":
                     if (this.operation != Operation.PLUS){
-                        argument2.setLength(0);
-                        var2 = var1 ;
                         this.operation = Operation.PLUS    ;
+                        operationButton(buttonText);
                     }
                     break;
                 case "/":
                     if (this.operation != Operation.DIVIDE){
-                        argument2.setLength(0);
-                        var2 = var1 ;
                         this.operation = Operation.DIVIDE    ;
+                        operationButton(buttonText);
                     }
                     break;
                 case "*":
                     if (this.operation != Operation.MULTIPLE){
-                        argument2.setLength(0);
-                        var2 = var1 ;
                         this.operation = Operation.MULTIPLE    ;
+                        operationButton(buttonText);
                     }
                     break;
                 case "=":
@@ -186,6 +262,47 @@ class Calculator implements Serializable {
                     break;
             }
         }
+    }
+
+    private void operationButton(String buttonText) {
+        argument2.setLength(0);
+        var2 = var1 ;
+        //add second line
+        if (argument1.indexOf("\n") == -1) argument1.append(buttonText + "\n")    ;
+        else {
+            argument1.deleteCharAt(argument1.indexOf("\n") - 1) ;
+            argument1.deleteCharAt(argument1.indexOf("\n")) ;
+            argument1.append(buttonText + "\n")    ;
+        }
+        outputText = convertString(argument1.toString()) + convertString(Double.toString(var2))  ;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if (var1 == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeDouble(var1);
+        }
+        if (var2 == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeDouble(var2);
+        }
+        if (var == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeDouble(var);
+        }
+        dest.writeString(outputText);
     }
 }
 
