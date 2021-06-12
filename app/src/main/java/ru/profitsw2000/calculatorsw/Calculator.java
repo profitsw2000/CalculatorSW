@@ -6,6 +6,17 @@ import android.widget.TextView;
 
 
 public class Calculator implements Parcelable {
+
+    private final String CLEAR = "C"    ;
+    private final String BACKSPACE = "<--"    ;
+    private final String POINT = ","    ;
+    private final String SQRT = "√"    ;
+    private final String MINUS = "-"    ;
+    private final String PLUS = "+"    ;
+    private final String DIVIDE = "/"    ;
+    private final String MULTIPLE = "*"    ;
+    private final String EQUAL = "="    ;
+
     private StringBuilder argument1, argument2 ;
     private Double var1, var2, var;
     private String outputText   ;
@@ -134,129 +145,154 @@ public class Calculator implements Parcelable {
         this.operation = Operation.NONE ;
     }
 
-    public void setText(TextView textView) {
-        textView.setText(outputText);
+    private Double parseFromArgument (StringBuilder argument, String buttonText) {
+        if (argument.toString().equals("0")){
+            argument.setLength(0);
+            argument.append(buttonText) ;
+        }
+        else {
+            argument.append(buttonText) ;
+        }
+        Double dbl = Double.parseDouble(argument.toString())    ;
+        return dbl  ;
+    }
+
+    private void pointPressed(){
+        if (this.operation == Operation.NONE) {
+            if (argument1.indexOf(",") == -1) {
+                argument1.append(".");
+                outputText = convertString(argument1.toString());
+            }
+        } else {
+            if (argument2.length() > 0){
+                if (argument2.indexOf(",") == -1) {
+                    argument2.append(".");
+                    //add second line
+                    outputText = convertString(argument1.toString()) + convertString(argument2.toString())   ;
+                }
+            }
+        }
+    }
+
+    private void clearPressed() {
+        argument1.setLength(0);
+        argument1.append("0")   ;
+        argument2.setLength(0);
+        this.var1 = 0.0   ;
+        this.var2 = 0.0   ;
+        this.var = 0.0  ;
+        this.operation = Operation.NONE ;
+        outputText = "0"   ;
+    }
+
+    private void backspacePressed() {
+        if (this.operation == Operation.NONE){
+            if (argument1.length() > 1) {
+                argument1.deleteCharAt(argument1.length() - 1)    ;
+                var1 = Double.parseDouble(argument1.toString())    ;
+                outputText = convertString(argument1.toString());
+            }
+            else if (argument1.length() > 0 && argument1.charAt(0) != '0'){
+                argument1.setLength(0)   ;
+                var1 = 0.0    ;
+                outputText = "0"    ;
+            }
+        } else {
+            if (argument2.length() > 1) {
+                argument2.deleteCharAt(argument2.length() - 1)    ;
+                var2 = Double.parseDouble(argument2.toString())    ;
+                //add second line
+                outputText = convertString(argument1.toString()) + convertString(argument2.toString());
+            }
+            else if (argument2.length() > 0 && argument2.charAt(0) != '0'){
+                argument2.setLength(0)   ;
+                var2 = 0.0  ;
+                //add second line
+                outputText = convertString(argument1.toString()) + "0"    ;
+            }
+        }
+    }
+
+    private void sqrtPressed() {
+        if (this.operation == Operation.NONE) {
+            var = Math.sqrt(var1)   ;
+            outputText = convertString(Double.toString(var))  ;
+        }
+        else {
+            var2 = Math.sqrt(var2)  ;
+            //add second line
+            outputText = convertString(argument1.toString()) + convertString(Double.toString(var2))  ;
+        }
+    }
+
+    private void minusPressed (String buttonText) {
+        if (this.operation != Operation.MINUS){
+            this.operation = Operation.MINUS    ;
+            operationButton(buttonText);
+        }
+    }
+
+    private void plusPressed (String buttonText) {
+        if (this.operation != Operation.PLUS){
+            this.operation = Operation.PLUS    ;
+            operationButton(buttonText);
+        }
+    }
+
+    private void multiplePressed (String buttonText) {
+        if (this.operation != Operation.MULTIPLE){
+            this.operation = Operation.MULTIPLE    ;
+            operationButton(buttonText);
+        }
+    }
+
+    private void dividePressed (String buttonText) {
+        if (this.operation != Operation.DIVIDE){
+            this.operation = Operation.DIVIDE    ;
+            operationButton(buttonText);
+        }
     }
 
     public void getButton(String buttonText){
 
         if(isInteger(buttonText)) {
             if (this.operation == Operation.NONE) {
-                if (argument1.toString().equals("0")){
-                    argument1.setLength(0);
-                    argument1.append(buttonText) ;
-                }
-                else {
-                    argument1.append(buttonText) ;
-                }
-                var1 = Double.parseDouble(argument1.toString())    ;
+                var1 = parseFromArgument(argument1, buttonText)    ;
                 outputText = convertString(argument1.toString())   ;
             }
             else {
-                if (argument2.toString().equals("0")){
-                    argument2.setLength(0);
-                    argument2.append(buttonText) ;
-                }
-                else {
-                    argument2.append(buttonText) ;
-                }
-                var2 = Double.parseDouble(argument2.toString()) ;
+                var2 = parseFromArgument(argument2, buttonText)    ;
                 //add second line
                 outputText = convertString(argument1.toString()) + convertString(argument2.toString())   ;
             }
         }
         else {
             switch (buttonText) {
-                case ",":
-                    if (this.operation == Operation.NONE) {
-                        if (argument1.indexOf(",") == -1) {
-                            argument1.append(".");
-                            outputText = convertString(argument1.toString());
-                        }
-                     } else {
-                        if (argument2.length() > 0){
-                            if (argument2.indexOf(",") == -1) {
-                                argument2.append(".");
-                                //add second line
-                                outputText = convertString(argument1.toString()) + convertString(argument2.toString())   ;
-                            }
-                        }
-                    }
+                case POINT:
+                    pointPressed();
                     break;
-                case "C":
-                    argument1.setLength(0);
-                    argument1.append("0")   ;
-                    argument2.setLength(0);
-                    this.var1 = 0.0   ;
-                    this.var2 = 0.0   ;
-                    this.var = 0.0  ;
-                    this.operation = Operation.NONE ;
-                    outputText = "0"   ;
+                case CLEAR:
+                    clearPressed();
                     break;
-                case "<--":
-                    if (this.operation == Operation.NONE){
-                        if (argument1.length() > 1) {
-                            argument1.deleteCharAt(argument1.length() - 1)    ;
-                            var1 = Double.parseDouble(argument1.toString())    ;
-                            outputText = convertString(argument1.toString());
-                        }
-                        else if (argument1.length() > 0 && argument1.charAt(0) != '0'){
-                            argument1.setLength(0)   ;
-                            var1 = 0.0    ;
-                            outputText = "0"    ;
-                        }
-                    } else {
-                        if (argument2.length() > 1) {
-                            argument2.deleteCharAt(argument2.length() - 1)    ;
-                            var2 = Double.parseDouble(argument2.toString())    ;
-                            //add second line
-                            outputText = convertString(argument1.toString()) + convertString(argument2.toString());
-                        }
-                        else if (argument2.length() > 0 && argument2.charAt(0) != '0'){
-                            argument2.setLength(0)   ;
-                            var2 = 0.0  ;
-                            //add second line
-                            outputText = convertString(argument1.toString()) + "0"    ;
-                        }
-                    }
-
+                case BACKSPACE:
+                    backspacePressed();
                     break;
-                case "√":
-                    if (this.operation == Operation.NONE) {
-                        var = Math.sqrt(var1)   ;
-                        outputText = convertString(Double.toString(var))  ;
-                    }
-                    else {
-                        var2 = Math.sqrt(var2)  ;
-                        //add second line
-                        outputText = convertString(argument1.toString()) + convertString(Double.toString(var2))  ;
-                    }
+                case SQRT:
+                    sqrtPressed();
                     break;
-                case "-":
-                    if (this.operation != Operation.MINUS){
-                        this.operation = Operation.MINUS    ;
-                        operationButton(buttonText);
-                    }
+                case MINUS:
+                    minusPressed(buttonText);
                     break;
-                case "+":
-                    if (this.operation != Operation.PLUS){
-                        this.operation = Operation.PLUS    ;
-                        operationButton(buttonText);
-                    }
+                case PLUS:
+                    plusPressed(buttonText);
                     break;
-                case "/":
-                    if (this.operation != Operation.DIVIDE){
-                        this.operation = Operation.DIVIDE    ;
-                        operationButton(buttonText);
-                    }
+                case DIVIDE:
+                    dividePressed(buttonText);
                     break;
-                case "*":
-                    if (this.operation != Operation.MULTIPLE){
-                        this.operation = Operation.MULTIPLE    ;
-                        operationButton(buttonText);
-                    }
+                case MULTIPLE:
+                    multiplePressed(buttonText);
                     break;
-                case "=":
+                case EQUAL:
                     equalPressed();
                     break;
                 default:

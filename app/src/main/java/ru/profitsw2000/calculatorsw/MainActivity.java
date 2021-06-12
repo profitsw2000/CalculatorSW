@@ -11,8 +11,25 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
     private final static String keyCalculator = "AAAAA"    ;
-    private Button one, two, three, four, five, six, seven, eight, nine, zero,
-            point, divide, multiple, minus, plus, clear, backspace, sqrt, equal ;
+    private Button one  ;
+    private Button two;
+    private Button three;
+    private Button four;
+    private Button five;
+    private Button six;
+    private Button seven;
+    private Button eight;
+    private Button nine;
+    private Button zero;
+    private Button point;
+    private Button divide;
+    private Button multiple;
+    private Button minus;
+    private Button plus;
+    private Button clear;
+    private Button backspace;
+    private Button sqrt;
+    private Button equal;
     private TextView enter_field    ;
     private Calculator calculator = new Calculator()   ;
 
@@ -34,9 +51,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        Calculator calculator = new Calculator()    ;
         calculator = savedInstanceState.getParcelable(keyCalculator) ;
-        calculator.setText(enter_field);
+        enter_field.setText(calculator.getOutputText());
     }
 
     private void findViews(){
@@ -90,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 calculator.getButton(button.getText().toString());
-                calculator.setText(enter_field);
+                enter_field.setText(calculator.getOutputText());
             }
         });
     }
