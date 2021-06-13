@@ -22,4 +22,6 @@
     <string name="button_point">,</string>
     <string name="button_equal">=</string>
     <string name="enter_field_text">0</string>
+    <string name="my_style">MyStyle</string>
+    <string name="my_style1">MyStyle1</string>
 </resources>

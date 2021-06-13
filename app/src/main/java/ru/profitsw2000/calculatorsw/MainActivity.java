@@ -11,6 +11,7 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
     private final static String keyCalculator = "AAAAA"    ;
+    //private boolean
     private Button one  ;
     private Button two;
     private Button three;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private Button backspace;
     private Button sqrt;
     private Button equal;
+    //private Button mode ;
     private TextView enter_field    ;
     private Calculator calculator = new Calculator()   ;
 
@@ -75,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         backspace = findViewById(R.id.button_backspace) ;
         sqrt = findViewById(R.id.button_square_root)    ;
         equal = findViewById(R.id.button_equal) ;
+        //mode = findViewById(R.id.button_extended_func) ;
         enter_field = findViewById(R.id.enter_field)    ;
     }
 
@@ -111,4 +114,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+/*    private void changeStyle() {
+        mode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }*/
 }
