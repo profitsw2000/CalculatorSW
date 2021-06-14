@@ -26,4 +26,5 @@
     <string name="my_style1">MyStyle1</string>
     <string name="mode_day_night">Mode</string>
     <string name="mode_value">Day</string>
+    <string name="button_update">Update</string>
 </resources>

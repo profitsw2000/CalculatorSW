@@ -15,8 +15,10 @@ public class MainActivity extends AppCompatActivity {
     private static final String keyCalculator = "AAAAA"    ;
     private static final String NameSharedPreference = "MYMODE";
     private static final String appTheme = "MY_THEME";
+    private static final String currentMode = "CURRENT_MODE"    ;
+    private static final String newMode = "NEW_MODE"    ;
 
-    private boolean night_mode = false  ;
+    private boolean night_mode = true  ;
     private Button one  ;
     private Button two;
     private Button three;
@@ -43,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //getAppTheme();
+        getAppTheme();
         setContentView(R.layout.activity_main);
 
         findViews();
@@ -126,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent modeSettings = new Intent(MainActivity.this, SettingsActivity.class);
+                modeSettings.putExtra(currentMode, night_mode)  ;
                 startActivity(modeSettings);
 /*                if (night_mode == false) {
                     night_mode = true   ;
@@ -151,17 +154,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getAppTheme() {
-        boolean bool    ;
+        /*boolean bool    ;
 
         SharedPreferences sharedPreferences = getSharedPreferences(NameSharedPreference, MODE_PRIVATE)  ;
-        bool = sharedPreferences.getBoolean(appTheme, false)    ;
+        bool = sharedPreferences.getBoolean(appTheme, false)    ;*/
+        if (getIntent().getExtras() != null){
+            night_mode = getIntent().getExtras().getBoolean(newMode)    ;
 
-        if (bool) {
-            setTheme(R.style.MyStyle);
+            if (night_mode) {
+                setTheme(R.style.MyStyleNight);
+            }
+            else {
+                setTheme(R.style.MyStyle);
+            }
         }
-        else {
-            setTheme(R.style.MyStyleNight);
-        }
-        night_mode = bool   ;
+        //night_mode = bool   ;
     }
 }
