@@ -3,6 +3,7 @@ package ru.profitsw2000.calculatorsw;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getAppTheme();
+        //getAppTheme();
         setContentView(R.layout.activity_main);
 
         findViews();
@@ -124,7 +125,9 @@ public class MainActivity extends AppCompatActivity {
         mode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (night_mode == false) {
+                Intent modeSettings = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(modeSettings);
+/*                if (night_mode == false) {
                     night_mode = true   ;
                     //set theme
                     saveAppTheme(night_mode);   ;
@@ -135,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
                     //set theme
                     saveAppTheme(night_mode);   ;
                     recreate();
-                }
+                }*/
             }
         });
     }
@@ -155,11 +158,9 @@ public class MainActivity extends AppCompatActivity {
 
         if (bool) {
             setTheme(R.style.MyStyle);
-            //enter_field.setText("Yes");
         }
         else {
             setTheme(R.style.MyStyleNight);
-            //enter_field.setText("No");
         }
         night_mode = bool   ;
     }
