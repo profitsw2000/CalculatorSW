@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String currentMode = "CURRENT_MODE"    ;
     private static final String newMode = "NEW_MODE"    ;
 
-    private boolean night_mode = true  ;
+    private boolean night_mode = false  ;
     private Button one  ;
     private Button two;
     private Button three;
