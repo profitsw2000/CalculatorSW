@@ -3,6 +3,7 @@ package ru.profitsw2000.calculatorsw;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,7 +11,11 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final static String keyCalculator = "AAAAA"    ;
+    private static final String keyCalculator = "AAAAA"    ;
+    private static final String NameSharedPreference = "MYMODE";
+    private static final String appTheme = "MY_THEME";
+
+    private boolean night_mode = false  ;
     private Button one  ;
     private Button two;
     private Button three;
@@ -30,16 +35,19 @@ public class MainActivity extends AppCompatActivity {
     private Button backspace;
     private Button sqrt;
     private Button equal;
+    private Button mode ;
     private TextView enter_field    ;
     private Calculator calculator = new Calculator()   ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getAppTheme();
         setContentView(R.layout.activity_main);
 
         findViews();
         buttonsListen();
+        changeStyle();
     }
 
     @Override
@@ -75,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         backspace = findViewById(R.id.button_backspace) ;
         sqrt = findViewById(R.id.button_square_root)    ;
         equal = findViewById(R.id.button_equal) ;
+        mode = findViewById(R.id.button_extended_func) ;
         enter_field = findViewById(R.id.enter_field)    ;
     }
 
@@ -111,4 +120,47 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void changeStyle() {
+        mode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (night_mode == false) {
+                    night_mode = true   ;
+                    //set theme
+                    saveAppTheme(night_mode);   ;
+                    recreate();
+                }
+                else {
+                    night_mode = false   ;
+                    //set theme
+                    saveAppTheme(night_mode);   ;
+                    recreate();
+                }
+            }
+        });
+    }
+
+    private void saveAppTheme(boolean bool){
+        SharedPreferences sharedPreferences = getSharedPreferences(NameSharedPreference, MODE_PRIVATE)  ;
+        SharedPreferences.Editor editor = sharedPreferences.edit()  ;
+        editor.putBoolean(appTheme, bool)   ;
+        editor.apply();
+    }
+
+    private void getAppTheme() {
+        boolean bool    ;
+
+        SharedPreferences sharedPreferences = getSharedPreferences(NameSharedPreference, MODE_PRIVATE)  ;
+        bool = sharedPreferences.getBoolean(appTheme, false)    ;
+
+        if (bool) {
+            setTheme(R.style.MyStyle);
+            //enter_field.setText("Yes");
+        }
+        else {
+            setTheme(R.style.MyStyleNight);
+            //enter_field.setText("No");
+        }
+        night_mode = bool   ;
+    }
 }
