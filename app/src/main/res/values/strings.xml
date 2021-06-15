@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CalculatorSW</string>
+    <string name="button_launch">Launch</string>
+    <string name="text_launch">Launch Calculator</string>
 </resources>
