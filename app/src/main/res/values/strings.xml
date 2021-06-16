@@ -17,11 +17,14 @@
     <string name="button_2">2</string>
     <string name="button_3">3</string>
     <string name="button_plus">+</string>
-    <string name="button_ext_func">R</string>
+    <string name="button_ext_func">SET</string>
     <string name="button_0">0</string>
     <string name="button_point">,</string>
     <string name="button_equal">=</string>
     <string name="enter_field_text">0</string>
     <string name="my_style">MyStyle</string>
     <string name="my_style1">MyStyle1</string>
+    <string name="mode_day_night">Mode</string>
+    <string name="mode_value">Day</string>
+    <string name="button_update">Update</string>
 </resources>

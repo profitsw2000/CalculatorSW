@@ -3,6 +3,7 @@ package ru.profitsw2000.calculatorsw;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String keyCalculator = "AAAAA"    ;
     private static final String NameSharedPreference = "MYMODE";
     private static final String appTheme = "MY_THEME";
+    private static final String currentMode = "CURRENT_MODE"    ;
+    private static final String newMode = "NEW_MODE"    ;
 
     private boolean night_mode = false  ;
     private Button one  ;
@@ -124,7 +127,10 @@ public class MainActivity extends AppCompatActivity {
         mode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (night_mode == false) {
+                Intent modeSettings = new Intent(MainActivity.this, SettingsActivity.class);
+                modeSettings.putExtra(currentMode, night_mode)  ;
+                startActivity(modeSettings);
+/*                if (night_mode == false) {
                     night_mode = true   ;
                     //set theme
                     saveAppTheme(night_mode);   ;
@@ -135,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
                     //set theme
                     saveAppTheme(night_mode);   ;
                     recreate();
-                }
+                }*/
             }
         });
     }
@@ -148,19 +154,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getAppTheme() {
-        boolean bool    ;
+        /*boolean bool    ;
 
         SharedPreferences sharedPreferences = getSharedPreferences(NameSharedPreference, MODE_PRIVATE)  ;
-        bool = sharedPreferences.getBoolean(appTheme, false)    ;
+        bool = sharedPreferences.getBoolean(appTheme, false)    ;*/
+        if (getIntent().getExtras() != null){
+            night_mode = getIntent().getExtras().getBoolean(newMode)    ;
 
-        if (bool) {
-            setTheme(R.style.MyStyle);
-            //enter_field.setText("Yes");
+            if (night_mode) {
+                setTheme(R.style.MyStyleNight);
+            }
+            else {
+                setTheme(R.style.MyStyle);
+            }
         }
-        else {
-            setTheme(R.style.MyStyleNight);
-            //enter_field.setText("No");
-        }
-        night_mode = bool   ;
+        //night_mode = bool   ;
     }
 }
